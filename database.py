@@ -495,3 +495,40 @@ class DatabaseManager:
             ''', (cutoff_time,))
             
             conn.commit()
+    
+    def get_database_stats(self) -> Dict[str, Any]:
+        """Get database statistics for debug purposes.
+        
+        Returns:
+            Dictionary containing database statistics
+        """
+        import os
+        
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            
+            # Get total players
+            cursor.execute('SELECT COUNT(*) FROM players')
+            total_players = cursor.fetchone()[0]
+            
+            # Get active sessions (players active in last 30 minutes)
+            cutoff_time = datetime.now() - timedelta(minutes=30)
+            cursor.execute('''
+                SELECT COUNT(*) FROM players 
+                WHERE last_active > ?
+            ''', (cutoff_time,))
+            active_sessions = cursor.fetchone()[0]
+            
+            # Get database file size
+            try:
+                db_size = os.path.getsize(self.db_path)
+                db_size_mb = round(db_size / (1024 * 1024), 2)
+                db_size_str = f"{db_size_mb} MB"
+            except OSError:
+                db_size_str = "Unknown"
+            
+            return {
+                'total_players': total_players,
+                'active_sessions': active_sessions,
+                'db_size': db_size_str
+            }
