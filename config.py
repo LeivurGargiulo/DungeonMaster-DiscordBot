@@ -11,6 +11,13 @@ from typing import Dict, Any
 # Wrong:   export TELEGRAM_TOKEN="your_token_here"
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', 'your_telegram_bot_token_here')
 
+# Validate Telegram token
+if TELEGRAM_TOKEN == 'your_telegram_bot_token_here':
+    raise ValueError(
+        "Please set your Telegram bot token! "
+        "Set the TELEGRAM_TOKEN environment variable: export TELEGRAM_TOKEN=your_actual_token"
+    )
+
 # LLM Configuration
 LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'ollama')  # 'ollama', 'openrouter', or 'openai'
 OLLAMA_BASE_URL = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
