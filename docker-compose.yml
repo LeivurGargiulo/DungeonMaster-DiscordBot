@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  discord-bot:
+    build: .
+    container_name: mini-dungeon-master-discord
+    restart: unless-stopped
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://localhost:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama2}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-openai/gpt-3.5-turbo}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-3.5-turbo}
+      - DATABASE_PATH=${DATABASE_PATH:-dungeon_master.db}
+      - DISCORD_LOG_LEVEL=${DISCORD_LOG_LEVEL:-INFO}
+      - LOG_FILE=${LOG_FILE:-logs/discord_bot.log}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - bot-network
+
+  # Optional: Ollama service for local LLM
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - bot-network
+    profiles:
+      - llm
+
+volumes:
+  ollama_data:
+
+networks:
+  bot-network:
+    driver: bridge
