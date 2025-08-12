@@ -3,35 +3,85 @@ version: '3.8'
 services:
   discord-bot:
     build: .
-    container_name: mini-dungeon-master-discord
+    container_name: mini-dungeon-master-bot
     restart: unless-stopped
     environment:
+      # Required: Discord Bot Token
       - DISCORD_TOKEN=${DISCORD_TOKEN}
+      
+      # Optional: Bot Configuration
+      - COMMAND_PREFIX=${COMMAND_PREFIX:-!}
+      - BOT_STATUS=${BOT_STATUS:-!help | Mini Dungeon Master}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FILE=${LOG_FILE:-logs/discord_bot.log}
+      
+      # Optional: Database Configuration
+      - DATABASE_PATH=${DATABASE_PATH:-data/dungeon_master.db}
+      
+      # Optional: LLM Configuration
       - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://localhost:11434}
       - OLLAMA_MODEL=${OLLAMA_MODEL:-llama2}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
       - OPENROUTER_MODEL=${OPENROUTER_MODEL:-openai/gpt-3.5-turbo}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - OPENAI_MODEL=${OPENAI_MODEL:-gpt-3.5-turbo}
-      - DATABASE_PATH=${DATABASE_PATH:-dungeon_master.db}
-      - DISCORD_LOG_LEVEL=${DISCORD_LOG_LEVEL:-INFO}
-      - LOG_FILE=${LOG_FILE:-logs/discord_bot.log}
+      
+      # Optional: Performance Configuration
+      - CACHE_ENABLED=${CACHE_ENABLED:-true}
+      - CACHE_TTL_SECONDS=${CACHE_TTL_SECONDS:-300}
+      - CACHE_MAX_SIZE=${CACHE_MAX_SIZE:-1000}
+      - MAX_MESSAGE_LENGTH=${MAX_MESSAGE_LENGTH:-2000}
+      - CLEANUP_INTERVAL_HOURS=${CLEANUP_INTERVAL_HOURS:-1}
+      
+      # Optional: Rate Limiting
+      - COOLDOWN_EXPLORE=${COOLDOWN_EXPLORE:-30}
+      - COOLDOWN_ATTACK=${COOLDOWN_ATTACK:-5}
+      - COOLDOWN_USE=${COOLDOWN_USE:-10}
+      - COOLDOWN_START=${COOLDOWN_START:-60}
+      - TIMEOUT_CHOICE=${TIMEOUT_CHOICE:-300}
+      - TIMEOUT_COMBAT=${TIMEOUT_COMBAT:-60}
+      - TIMEOUT_ITEM_SELECTION=${TIMEOUT_ITEM_SELECTION:-60}
+      
+      # Optional: Game Configuration
+      - GAME_MAX_HEALTH=${GAME_MAX_HEALTH:-100}
+      - GAME_STARTING_HEALTH=${GAME_STARTING_HEALTH:-100}
+      - GAME_STARTING_LEVEL=${GAME_STARTING_LEVEL:-1}
+      - GAME_EXP_PER_LEVEL=${GAME_EXP_PER_LEVEL:-100}
+      - GAME_MAX_INVENTORY=${GAME_MAX_INVENTORY:-20}
+      - GAME_MIN_DAMAGE=${GAME_MIN_DAMAGE:-10}
+      - GAME_MAX_DAMAGE=${GAME_MAX_DAMAGE:-25}
+      - GAME_HEALING_POTION=${GAME_HEALING_POTION:-30}
+      - GAME_SESSION_TIMEOUT=${GAME_SESSION_TIMEOUT:-30}
     volumes:
-      - ./data:/app/data
+      # Persist logs and data
       - ./logs:/app/logs
+      - ./data:/app/data
+      # Mount environment file
+      - ./.env:/app/.env:ro
+    ports:
+      # Expose port for health checks (optional)
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8080/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
       - bot-network
 
   # Optional: Ollama service for local LLM
   ollama:
     image: ollama/ollama:latest
-    container_name: ollama
+    container_name: ollama-llm
     restart: unless-stopped
     ports:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
     networks:
       - bot-network
     profiles:
