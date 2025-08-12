@@ -27,6 +27,9 @@ class LLMClient:
             if self.provider == 'ollama':
                 response = requests.get(f"{config.OLLAMA_BASE_URL}/api/tags", timeout=5)
                 return response.status_code == 200
+            elif self.provider == 'openrouter':
+                # Test with a simple request
+                return bool(config.OPENROUTER_API_KEY)
             elif self.provider == 'openai':
                 # Test with a simple request
                 return bool(config.OPENAI_API_KEY)
@@ -50,6 +53,8 @@ class LLMClient:
         try:
             if self.provider == 'ollama':
                 return self._generate_with_ollama(prompt, max_tokens)
+            elif self.provider == 'openrouter':
+                return self._generate_with_openrouter(prompt, max_tokens)
             elif self.provider == 'openai':
                 return self._generate_with_openai(prompt, max_tokens)
         except Exception as e:
@@ -91,6 +96,45 @@ class LLMClient:
             
         except Exception as e:
             print(f"Ollama API error: {e}")
+            return None
+    
+    def _generate_with_openrouter(self, prompt: str, max_tokens: int) -> Optional[str]:
+        """Generate text using OpenRouter API.
+        
+        Args:
+            prompt: The input prompt
+            max_tokens: Maximum tokens to generate
+            
+        Returns:
+            Generated text or None
+        """
+        try:
+            headers = {
+                "Authorization": f"Bearer {config.OPENROUTER_API_KEY}",
+                "Content-Type": "application/json"
+            }
+            
+            payload = {
+                "model": config.OPENROUTER_MODEL,
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": max_tokens,
+                "temperature": 0.8
+            }
+            
+            response = requests.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content'].strip()
+            return None
+            
+        except Exception as e:
+            print(f"OpenRouter API error: {e}")
             return None
     
     def _generate_with_openai(self, prompt: str, max_tokens: int) -> Optional[str]:

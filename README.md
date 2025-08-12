@@ -9,7 +9,7 @@ A text-based RPG adventure bot for Telegram that acts as a Mini Dungeon Master, 
 - **Character Progression**: Level up, gain experience, and improve stats
 - **Combat System**: Turn-based combat with various enemies
 - **Inventory Management**: Collect and use items, weapons, and armor
-- **Dynamic Story Generation**: AI-powered narrative using local LLMs or OpenAI
+- **Dynamic Story Generation**: AI-powered narrative using local LLMs, OpenRouter, or OpenAI
 - **Persistent Game State**: SQLite database saves your progress
 - **Multiple Players**: Support for multiple users playing independently
 
@@ -33,7 +33,7 @@ A text-based RPG adventure bot for Telegram that acts as a Mini Dungeon Master, 
 ### Prerequisites
 - Python 3.8 or higher
 - A Telegram Bot Token (get from [@BotFather](https://t.me/botfather))
-- Optional: Ollama (for local LLM) or OpenAI API key
+- Optional: Ollama (for local LLM), OpenRouter API key, or OpenAI API key
 
 ### Installation
 
@@ -55,9 +55,11 @@ A text-based RPG adventure bot for Telegram that acts as a Mini Dungeon Master, 
    export TELEGRAM_TOKEN="your_telegram_bot_token_here"
    
    # Optional - LLM Configuration
-   export LLM_PROVIDER="ollama"  # or "openai"
+   export LLM_PROVIDER="ollama"  # or "openrouter" or "openai"
    export OLLAMA_BASE_URL="http://localhost:11434"
    export OLLAMA_MODEL="llama2"
+   export OPENROUTER_API_KEY="your_openrouter_api_key"
+   export OPENROUTER_MODEL="openai/gpt-3.5-turbo"
    export OPENAI_API_KEY="your_openai_api_key"
    export OPENAI_MODEL="gpt-3.5-turbo"
    
@@ -83,7 +85,16 @@ The bot can work with or without an LLM. If no LLM is available, it uses fallbac
    export OLLAMA_MODEL="llama2"
    ```
 
-#### Option 2: OpenAI
+#### Option 2: OpenRouter
+1. Get an API key from https://openrouter.ai/
+2. Set environment variables:
+   ```bash
+   export LLM_PROVIDER="openrouter"
+   export OPENROUTER_API_KEY="your_api_key"
+   export OPENROUTER_MODEL="openai/gpt-3.5-turbo"  # or any other model
+   ```
+
+#### Option 3: OpenAI
 1. Get an API key from https://platform.openai.com/
 2. Set environment variables:
    ```bash
