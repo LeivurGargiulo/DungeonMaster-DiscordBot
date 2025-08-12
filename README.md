@@ -52,15 +52,15 @@ A text-based RPG adventure bot for Telegram that acts as a Mini Dungeon Master, 
    Create a `.env` file or set environment variables:
    ```bash
    # Required
-   export TELEGRAM_TOKEN="your_telegram_bot_token_here"
+   export TELEGRAM_TOKEN=your_telegram_bot_token_here
    
    # Optional - LLM Configuration
    export LLM_PROVIDER="ollama"  # or "openrouter" or "openai"
    export OLLAMA_BASE_URL="http://localhost:11434"
    export OLLAMA_MODEL="llama2"
-   export OPENROUTER_API_KEY="your_openrouter_api_key"
+   export OPENROUTER_API_KEY=your_openrouter_api_key
    export OPENROUTER_MODEL="openai/gpt-3.5-turbo"
-   export OPENAI_API_KEY="your_openai_api_key"
+   export OPENAI_API_KEY=your_openai_api_key
    export OPENAI_MODEL="gpt-3.5-turbo"
    
    # Optional - Database
@@ -90,7 +90,7 @@ The bot can work with or without an LLM. If no LLM is available, it uses fallbac
 2. Set environment variables:
    ```bash
    export LLM_PROVIDER="openrouter"
-   export OPENROUTER_API_KEY="your_api_key"
+   export OPENROUTER_API_KEY=your_api_key
    export OPENROUTER_MODEL="openai/gpt-3.5-turbo"  # or any other model
    ```
 
@@ -99,7 +99,7 @@ The bot can work with or without an LLM. If no LLM is available, it uses fallbac
 2. Set environment variables:
    ```bash
    export LLM_PROVIDER="openai"
-   export OPENAI_API_KEY="your_api_key"
+   export OPENAI_API_KEY=your_api_key
    ```
 
 ## Game Mechanics

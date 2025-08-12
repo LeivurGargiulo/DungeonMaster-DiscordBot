@@ -6,12 +6,18 @@ import os
 from typing import Dict, Any
 
 # Telegram Bot Configuration
+# Note: When setting TELEGRAM_TOKEN in environment, do NOT include quotes
+# Correct: export TELEGRAM_TOKEN=your_token_here
+# Wrong:   export TELEGRAM_TOKEN="your_token_here"
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', 'your_telegram_bot_token_here')
 
 # LLM Configuration
 LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'ollama')  # 'ollama', 'openrouter', or 'openai'
 OLLAMA_BASE_URL = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
 OLLAMA_MODEL = os.getenv('OLLAMA_MODEL', 'llama2')
+# Note: When setting API keys in environment, do NOT include quotes
+# Correct: export OPENROUTER_API_KEY=your_key_here
+# Wrong:   export OPENROUTER_API_KEY="your_key_here"
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY', '')
 OPENROUTER_MODEL = os.getenv('OPENROUTER_MODEL', 'openai/gpt-3.5-turbo')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')

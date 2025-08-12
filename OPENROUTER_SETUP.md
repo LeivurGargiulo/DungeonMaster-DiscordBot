@@ -22,7 +22,7 @@ Set the following environment variables:
 
 ```bash
 export LLM_PROVIDER="openrouter"
-export OPENROUTER_API_KEY="sk-or-your-api-key-here"
+export OPENROUTER_API_KEY=sk-or-your-api-key-here
 export OPENROUTER_MODEL="openai/gpt-3.5-turbo"
 ```
 
@@ -47,21 +47,21 @@ Run the bot and try the `/start` command. If everything is configured correctly,
 ### Basic Setup
 ```bash
 export LLM_PROVIDER="openrouter"
-export OPENROUTER_API_KEY="sk-or-your-key"
+export OPENROUTER_API_KEY=sk-or-your-key
 export OPENROUTER_MODEL="openai/gpt-3.5-turbo"
 ```
 
 ### Using Claude
 ```bash
 export LLM_PROVIDER="openrouter"
-export OPENROUTER_API_KEY="sk-or-your-key"
+export OPENROUTER_API_KEY=sk-or-your-key
 export OPENROUTER_MODEL="anthropic/claude-3-haiku"
 ```
 
 ### Using Gemini
 ```bash
 export LLM_PROVIDER="openrouter"
-export OPENROUTER_API_KEY="sk-or-your-key"
+export OPENROUTER_API_KEY=sk-or-your-key
 export OPENROUTER_MODEL="google/gemini-pro"
 ```
 
