@@ -1,4 +1,17 @@
-discord.py==2.3.2
-python-telegram-bot==20.7
-requests==2.31.0
-psutil==5.9.6
+# Core Discord bot library
+discord.py>=2.3.2,<3.0.0
+
+# HTTP requests (for API calls)
+requests>=2.31.0,<3.0.0
+
+# System monitoring (optional, for performance tracking)
+psutil>=5.9.6,<6.0.0
+
+# Environment variable management (optional, for enhanced config)
+python-dotenv>=1.0.0,<2.0.0
+
+# Async utilities (optional, for enhanced async operations)
+aiohttp>=3.8.0,<4.0.0
+
+# Data validation (optional, for enhanced config validation)
+pydantic>=2.0.0,<3.0.0
